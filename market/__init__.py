@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///market.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
+app.config["SECRET_KEY"] = '95cd72ac7f70b4ad5905be48'
 db = SQLAlchemy(app)
 
 from market import routes
