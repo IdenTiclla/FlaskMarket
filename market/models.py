@@ -34,6 +34,9 @@ class User(db.Model, UserMixin):
     
     def check_password_correction(self, attempted_password):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
+
+    def can_purchase(self, item_obj):
+        return self.budget >= item_obj.price
         
     def __repr__(self):
         return f"User: {self.username}"
@@ -45,6 +48,11 @@ class Item(db.Model):
     price = db.Column(db.Integer(), nullable=False)
     description = db.Column(db.String(length=1024), nullable=False, unique=True)
     owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
+
+    def buy(self, user):
+        self.owner = user.id
+        user.budget -= self.price
+        db.session.commit()
     
     def __repr__(self):
         return f"Item: {self.name}"
